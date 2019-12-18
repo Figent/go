@@ -4,13 +4,12 @@ import(
 
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 
 )
 
-func home(w http.ResponseWriter, r*http.Request)  {
+func (app *application)home(w http.ResponseWriter, r*http.Request)  {
 
 	if r.URL.Path != "/"{
 
@@ -33,7 +32,7 @@ func home(w http.ResponseWriter, r*http.Request)  {
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 
-		log.Println(err.Error())
+		app.errorLog.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
 		return
 
@@ -46,7 +45,7 @@ func home(w http.ResponseWriter, r*http.Request)  {
 	err = ts.Execute(w, nil)
 	if err != nil {
 
-		log.Println(err.Error())
+		app.errorLog.Println(err.Error())
 		http.Error(w, "Internal Server Error", 500)
 		
 	}
@@ -54,7 +53,7 @@ func home(w http.ResponseWriter, r*http.Request)  {
 	
 }
 
-func showsnippet(w http.ResponseWriter, r*http.Request){
+func (app *application)showsnippet(w http.ResponseWriter, r*http.Request){
 
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	
@@ -69,7 +68,7 @@ func showsnippet(w http.ResponseWriter, r*http.Request){
 
 }
 
-func createsnippet(w http.ResponseWriter, r*http.Request){
+func (app *application)createsnippet(w http.ResponseWriter, r*http.Request){
 
 	if r.Method != "POST" {
 
